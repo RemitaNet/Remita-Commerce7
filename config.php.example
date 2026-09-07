@@ -1,0 +1,154 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Commerce7 + Remita Payment Engine — Configuration Example
+ *
+ * Copy this file to config.php and populate every value marked YOUR_*.
+ * config.php MUST be excluded from version control (.gitignore).
+ *
+ * Sections:
+ *   commerce7  — Commerce7 REST API credentials
+ *   remita     — Remita Payment Engine credentials
+ *   adapter    — paths, logging, and runtime settings
+ */
+
+return [
+
+    // =========================================================================
+    // Commerce7 Credentials
+    // https://docs.commerce7.com/
+    // =========================================================================
+    'commerce7' => [
+        /**
+         * Tenant ID
+         * The slug that appears in your Commerce7 admin URL, e.g.:
+         *   https://admin.commerce7.com/my-winery  →  my-winery
+         */
+        'tenant_id' => 'YOUR_COMMERCE7_TENANT_ID',
+
+        /**
+         * API Key
+         * Generated in Commerce7 Admin → Settings → API Keys.
+         * The key is shown only once; copy it immediately.
+         *
+         * Required permissions on the key:
+         *   Orders    → Read
+         *   Payments  → Write
+         */
+        'api_key'   => 'YOUR_COMMERCE7_API_KEY',
+
+        /**
+         * Base URL
+         * Commerce7 REST API v1 base URL. Do not change unless Commerce7
+         * revisions their API and publishes a new base URL.
+         */
+        'base_url'  => 'https://api.commerce7.com/v1',
+    ],
+
+    // =========================================================================
+    // Remita Payment Engine Credentials
+    // https://remita.net
+    // =========================================================================
+    'remita' => [
+        /**
+         * Merchant ID
+         * Displayed on your Remita merchant profile page.
+         */
+        'merchant_id'    => 'YOUR_REMITA_MERCHANT_ID',
+
+        /**
+         * API Key
+         * Issued in the Remita merchant portal under API Credentials.
+         */
+        'api_key'        => 'YOUR_REMITA_API_KEY',
+
+        /**
+         * Service Type ID
+         * The payment-type code assigned by Remita for your product/service.
+         * Obtain from your Remita account manager or merchant portal.
+         */
+        'service_type_id' => 'YOUR_REMITA_SERVICE_TYPE_ID',
+
+        /**
+         * Webhook Secret
+         * A strong random string (32+ characters) that you choose.
+         * Configure the SAME value in the Remita merchant portal under
+         * Webhook Settings → Signing Secret.
+         *
+         * Used to verify HMAC-SHA256 signatures on inbound webhook deliveries.
+         *
+         * Generate one:  php -r "echo bin2hex(random_bytes(32));"
+         */
+        'webhook_secret' => 'YOUR_REMITA_WEBHOOK_SECRET',
+
+        /**
+         * Payment Engine Base URL
+         *
+         * Sandbox (test):
+         *   https://remitademo.net/remita/exapp/api/v1/send/api
+         *
+         * Production (live):
+         *   https://login.remita.net/remita/exapp/api/v1/send/api
+         */
+        'base_url'       => 'https://login.remita.net/remita/exapp/api/v1/send/api',
+
+        /**
+         * Checkout URL
+         * The Remita hosted checkout page where customers are redirected.
+         *
+         * Sandbox:    https://remitademo.net/remita/ecomm/init.reg
+         * Production: https://login.remita.net/remita/ecomm/init.reg
+         */
+        'checkout_url'   => 'https://login.remita.net/remita/ecomm/init.reg',
+
+        /**
+         * Return URL
+         * Where Remita sends the customer after completing (or cancelling)
+         * payment. This is a browser redirect, not a server-to-server call.
+         *
+         * Example: https://my-winery.com/checkout/thank-you
+         */
+        'return_url'     => 'https://YOUR-DOMAIN.com/payment/return',
+    ],
+
+    // =========================================================================
+    // Adapter Settings
+    // =========================================================================
+    'adapter' => [
+        /**
+         * Data directory — must be writable by the web server process.
+         * Contains two sub-directories created automatically on first use:
+         *   data/idempotency/   one JSON file per processed payment
+         *   data/order_map/     one JSON file per initiated checkout
+         *
+         * This directory MUST NOT be web-accessible. Protect it with
+         * an .htaccess Deny or move it above the document root.
+         */
+        'data_dir'  => __DIR__ . '/data',
+
+        /**
+         * Log directory — must be writable by the web server process.
+         * Daily JSON-line log files are created here automatically:
+         *   logs/commerce7-YYYY-MM-DD.log
+         *   logs/webhook-YYYY-MM-DD.log
+         *   logs/initiate-YYYY-MM-DD.log
+         */
+        'log_dir'   => __DIR__ . '/logs',
+
+        /**
+         * Minimum log level.
+         * Use 'debug' during development to capture full request/response detail.
+         * Use 'info' or 'warning' in production.
+         *
+         * Allowed values: 'debug' | 'info' | 'warning' | 'error'
+         */
+        'log_level' => 'info',
+
+        /**
+         * Currency code (informational — used in log output).
+         */
+        'currency'  => 'NGN',
+    ],
+];
