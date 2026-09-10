@@ -279,6 +279,3 @@ bash scripts/package-commerce7.sh
 - Keep idempotency enabled.
 - Use HTTPS in production.
 
-## 📄 License
-
-See the repository `LICENSE` file for details.
